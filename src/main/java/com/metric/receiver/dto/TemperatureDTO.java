@@ -8,14 +8,14 @@ public class TemperatureDTO {
     @NotNull
     private double temperature;
 
-    private Date date = new Date();
+    private Date at = new Date();
 
     public TemperatureDTO() {
     }
 
-    public TemperatureDTO(String sensorUuid, double temperature, Date date) {
+    public TemperatureDTO(String sensorUuid, double temperature, Date at) {
         this.sensorUuid = sensorUuid;
-        this.date = date;
+        this.at = at;
         this.temperature = temperature;
     }
 
@@ -35,12 +35,12 @@ public class TemperatureDTO {
         return temperature;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getAt() {
+        return at;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setAt(Date at) {
+        this.at = at;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class TemperatureDTO {
 
         if (Double.compare(that.temperature, temperature) != 0) return false;
         if (sensorUuid != null ? !sensorUuid.equals(that.sensorUuid) : that.sensorUuid != null) return false;
-        return date != null ? date.equals(that.date) : that.date == null;
+        return at != null ? at.equals(that.at) : that.at == null;
     }
 
     @Override
