@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 
 import static org.mockito.BDDMockito.given;
@@ -79,7 +80,7 @@ public class RestApiTest {
     public void differentUuid() {
         given(service.report(any(TemperatureDTO.class))).willReturn(mockReturn("ok"));
 
-        TemperatureDTO temp = new TemperatureDTO("uuid2", 20.9);
+        TemperatureDTO temp = new TemperatureDTO("uuid2", 20.9, new Date());
         ResponseDTO responseDTO =
                 this.restTemplate.postForObject(
                         "http://localhost:" + port + "/api/v1/sensors/uuid1/measurements",
