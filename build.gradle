@@ -1,0 +1,66 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('se.transmode.gradle:gradle-docker:1.2')
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
+
+group = 'com.metric'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = 'com.metric.receiver'
+    version =  '0.0.1'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    applicationName = jar.baseName
+    dockerfile = file('Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into "${stageDir}/target"
+        }
+    }
+}
+
+sourceSets {
+    test_integration {
+        java {
+            compileClasspath = sourceSets.main.output + configurations.testRuntime
+            runtimeClasspath = output + compileClasspath
+            srcDir file('src/test_integration/java')
+        }
+        resources.srcDir file('src/test_integration/resources')
+    }
+}
+
+task test_integration(type: Test) {
+    testClassesDir = sourceSets.test_integration.output.classesDir
+    classpath = sourceSets.test_integration.runtimeClasspath
+}
+
+check.dependsOn test_integration
+
+dependencies {
+    compile('org.springframework.kafka:spring-kafka')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.kafka:spring-kafka-test')
+}
