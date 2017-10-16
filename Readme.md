@@ -8,7 +8,7 @@ Access urls is specified in application.properties `spring.kafka.bootstrap-serve
 
 ### In docker
 
-    sudo ./gradlew build buildDocker
+    sudo ./gradlew build buildDocker -x test -x test_integration
     sudo docker run -p 8080:8080 -t com.metric.assessor
 
 ### In OS
